@@ -1,0 +1,3 @@
+[submodule "reference/code/SpecForge"]
+	path = reference/code/SpecForge
+	url = https://github.com/sgl-project/SpecForge.git
