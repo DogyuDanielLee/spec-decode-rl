@@ -1,0 +1,118 @@
+\documentclass[11pt]{article}
+
+\usepackage[margin=1in]{geometry}
+\usepackage{amsmath}
+\usepackage{enumitem}
+\usepackage{titlesec}
+\usepackage{kotex}
+\usepackage[hidelinks]{hyperref}
+
+\setlist[itemize]{leftmargin=*, itemsep=0.12em, topsep=0.12em}
+\setlist[enumerate]{leftmargin=*, itemsep=0.2em, topsep=0.2em}
+\setlength{\parindent}{0pt}
+\setlength{\parskip}{0.18em}
+\titlespacing*{\section}{0pt}{0.45em}{0.18em}
+
+\title{\vspace{-1.8em}Budget-Aware Multi-Drafter Selection for Speculative Decoding}
+\author{김재연 \quad 박준호 \quad 오윤상 \quad 이도규 \quad 이수정}
+\date{}
+
+\begin{document}
+\maketitle
+\vspace{-1.8em}
+
+\section{Motivation}
+
+Large language model (LLM) inference is often limited by autoregressive decoding: each generated token requires a sequential forward pass through the target model. Speculative decoding reduces this cost by using a smaller drafter model to propose several future tokens, which are then verified in parallel by the target model. If the draft tokens are accepted, the system advances by multiple tokens while preserving the target model's output distribution~\cite{specdec}.
+
+The effectiveness of speculative decoding depends heavily on the alignment between the drafter and the target model. A single drafter may work well for one domain, such as code, translation, or mathematical reasoning, but poorly for another. This motivates multi-drafter speculative decoding, where the system maintains multiple specialized drafters or drafting methods and dynamically selects the most useful one during generation.
+
+Recent work, METASD~\cite{metasd}, formulates multi-drafter selection as a multi-armed bandit problem. Each drafter is treated as an arm, and the bandit algorithm uses online alignment feedback, such as block divergence between drafter and target distributions, to balance exploration and exploitation.
+
+However, using more drafters is not free. Even if each drafter is small, maintaining a larger active drafter set consumes more resources than maintaining a smaller one. Therefore, the goal should not simply be to use as many drafters as possible. We ask whether most of the benefit of multi-drafter speculative decoding can be achieved with only a small number of active drafters.
+
+\section{Proposed Project}
+
+We propose to study \emph{budget-aware bandit selection} for multi-drafter speculative decoding. The key idea is simple: more active drafters are more costly, while fewer active drafters are preferable if they provide similar acceptance performance.
+
+At each turn, the policy selects a drafter from an active set. Periodically, it may update the active set by pruning low-utility drafters or reactivating inactive ones. We will use a penalized reward
+\begin{equation}
+    r_t = r^{\mathrm{align}}_t - \lambda |A_t|,
+\end{equation}
+where $r^{\mathrm{align}}_t$ is an alignment or accepted-token reward, $A_t$ is the active drafter set, and $\lambda$ controls how strongly the policy prefers fewer active drafters. When $\lambda=0$, the method reduces to ordinary multi-drafter selection. As $\lambda$ increases, the policy is pushed toward a smaller active set.
+
+We model each active drafter as a bandit arm. A UCB-style policy selects
+\begin{equation}
+    a_t = \arg\max_{i \in A_t}
+    \left(\hat{\mu}_{i,t} + \beta \sqrt{\frac{\log t}{n_{i,t}}}\right),
+\end{equation}
+where $\hat{\mu}_{i,t}$ is the empirical reward, $n_{i,t}$ is the selection count, and $\beta$ controls exploration. We will evaluate regret against the best fixed active set in hindsight.
+
+Our main research questions are:
+\begin{itemize}
+    \item Can a budget-aware active-drafter policy recover most of the speedup of full multi-drafter speculative decoding?
+    \item How does the active-drafter penalty change the tradeoff between acceptance rate and active set size?
+    \item When should the policy keep multiple drafters active, and when should it prune aggressively?
+    \item Which bandit algorithm is most robust under this penalized objective?
+\end{itemize}
+
+\section{Methodology}
+
+We will implement the study using SGLang~\cite{sglang} and SpecForge~\cite{specforge} on a single NVIDIA A100-40GB GPU. The verifier will be a model below 30B parameters, with Llama-3.1-8B-Instruct as the primary target. The drafter pool will consist of multiple EAGLE3~\cite{eagle3} draft checkpoints for the same verifier, prepared from different datasets. The controller will choose which subset of these drafters is active and which active drafter is selected for each turn.
+
+We will evaluate the following baselines and proposed methods:
+\begin{itemize}
+    \item Single-drafter speculative decoding using the best fixed drafter.
+    \item Uniform random drafter selection.
+    \item Full multi-drafter UCB, following the METASD-style formulation.
+    \item Fixed top-$k$ active drafter selection.
+    \item Proposed budget-aware bandit selection with an active-drafter penalty.
+\end{itemize}
+
+We will run three prompt sets: random prompts, a 1K-sample subset of MMLU~\cite{mmlu} for broad knowledge and exam-style reasoning, and a 1K-sample subset of GSM8K~\cite{gsm8k} for math word problems. GSM8K is a useful contrast because it has longer reasoning chains and a different token distribution from general knowledge questions.
+
+Metrics include accepted tokens per verification step, estimated decoding speedup, average number of active drafters, penalized reward, and regret. We will sweep $\lambda$ to characterize the Pareto frontier between acceptance performance and active drafter count.
+
+The expected contribution is a budget-aware bandit formulation and empirical analysis of the tradeoff between acceptance performance and active drafter count. The project is directly connected to reinforcement learning through online bandit decision-making, reward shaping, regret analysis, and non-stationary adaptation.
+
+\footnotesize
+\begin{thebibliography}{9}
+
+\bibitem{metasd}
+T. Kim, H. Jung, and S.-Y. Yun.
+\newblock Multi-Drafter Speculative Decoding with Alignment Feedback.
+\newblock arXiv:2604.05417, 2026.
+
+\bibitem{specdec}
+Y. Leviathan, M. Kalman, and Y. Matias.
+\newblock Fast Inference from Transformers via Speculative Decoding.
+\newblock ICML, 2023.
+
+\bibitem{sglang}
+L. Zheng et al.
+\newblock SGLang: Efficient Execution of Structured Language Model Programs.
+\newblock NeurIPS, 2024.
+
+\bibitem{specforge}
+SGLang Team.
+\newblock SpecForge: A Flexible and Efficient Open-Source Training Framework for Speculative Decoding.
+\newblock arXiv:2603.18567, 2026.
+
+\bibitem{eagle3}
+Y. Li et al.
+\newblock EAGLE-3: Scaling up Inference Acceleration of Large Language Models via Training-Time Test.
+\newblock arXiv:2503.01840, 2025.
+
+\bibitem{mmlu}
+D. Hendrycks et al.
+\newblock Measuring Massive Multitask Language Understanding.
+\newblock ICLR, 2021.
+
+\bibitem{gsm8k}
+K. Cobbe et al.
+\newblock Training Verifiers to Solve Math Word Problems.
+\newblock arXiv:2110.14168, 2021.
+
+\end{thebibliography}
+
+\end{document}
