@@ -1,5 +1,5 @@
 # Fdb version 4
-["pdflatex"] 1778940905.47732 "milestone.tex" "milestone.pdf" "milestone" 1778940905.76136 0
+["pdflatex"] 1778951869.2399 "milestone.tex" "milestone.pdf" "milestone" 1778951869.67431 0
   "/etc/texmf/web2c/texmf.cnf" 1777389822.53013 475 c0e671620eb5563b2130f56340a5fde8 ""
   "/home/dogyu/.texlive2023/texmf-var/fonts/pk/ljfour/jknappen/ec/tcrm1095.600pk" 1777389881.43836 12644 ae47fae6271579b4c299e930b1d5c62c ""
   "/usr/share/texlive/texmf-dist/fonts/map/fontname/texfonts.map" 1577235249 3524 cb3e574dea2d1052e39280babc910dc8 ""
@@ -39,8 +39,6 @@
   "/usr/share/texlive/texmf-dist/fonts/tfm/public/nanumtype1/nanummjmd6.tfm" 1364599308 1256 7f40e67a93382186df75e8e2b7098d53 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmbx12.pfb" 1248133631 32080 340ef9bf63678554ee606688e7b5339d ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi10.pfb" 1248133631 36299 5f9df58c2139e7edcf37c8fca4bd384d ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi7.pfb" 1248133631 36281 c355509802a035cadc5f15869451dcee ""
-  "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmmi8.pfb" 1248133631 35469 70d41d2b9ea31d5d813066df7c99281c ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr10.pfb" 1248133631 35752 024fb6c41858982481f6968b5fc26508 ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr17.pfb" 1248133631 32362 179c33bbf43f19adbb3825bb4e36e57a ""
   "/usr/share/texlive/texmf-dist/fonts/type1/public/amsfonts/cm/cmr7.pfb" 1248133631 32762 224316ccc9ad3ca0423a14971cfa7fc1 ""
@@ -114,9 +112,9 @@
   "/usr/share/texmf/web2c/texmf.cnf" 1707919699 40399 f2c302f7d2af602abb742093540a5834 ""
   "/var/lib/texmf/fonts/map/pdftex/updmap/pdftex.map" 1777390529.39037 230484 b5ecf1e2279bd656c2c0037689af4d45 ""
   "/var/lib/texmf/web2c/pdftex/pdflatex.fmt" 1777390568 6898647 4b55575ce60263324b0362f94691883e ""
-  "milestone.aux" 1778940905.66174 1365 9d6de4740d521c2e6e3bb09a95ad5737 "pdflatex"
-  "milestone.out" 1778940905.66174 800 7e778f20bad26c61e9e7ec766d1d5012 "pdflatex"
-  "milestone.tex" 1778940888.87487 9755 c982c5fdf6b78acffb11eba9be29524f ""
+  "milestone.aux" 1778951869.56644 1373 ff3ff880923dafedcdee03666c8e6165 "pdflatex"
+  "milestone.out" 1778951869.56644 800 7e778f20bad26c61e9e7ec766d1d5012 "pdflatex"
+  "milestone.tex" 1778951864.96644 10571 7d1604c831ae1d996417f9cf146c4c73 ""
   (generated)
   "milestone.aux"
   "milestone.log"

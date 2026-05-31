@@ -1,0 +1,7 @@
+.artifacts/
+__pycache__/
+*.py[cod]
+reference/code/SpecForge/cache/
+reference/code/SpecForge/configs/
+reference/code/SpecForge/outputs/
+reference/code/SpecForge/results/

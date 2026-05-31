@@ -73,11 +73,11 @@ Main evaluation table:
 
 Primary metric:
 
-- Accepted tokens per verification step.
+- Average accept length: generated output tokens per target verification step. Fix `speculative-num-draft-tokens=4` for all comparisons.
 
 Secondary metrics:
 
-- Acceptance rate.
+- Token-level acceptance rate.
 - Relative speedup over autoregressive decoding.
 - Mean/p50/p95 latency per generated token if available.
 - Output quality guardrail where applicable, e.g. exact match for GSM8K, pass@1 for code, or lossless speculative decoding consistency.
